@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
-    static Managers Instance;
+    public static Managers s_instance;
 
-    public static Managers GetInstance()
+    public static Managers Instance
     {
-        Init();
-        return Instance;
+        get { Init(); return s_instance;}
     }
-    // Start is called before the first frame update
+
+    public InputManager _input = new InputManager();
+    public static InputManager Input
+    {
+        get { return Instance._input; }
+    }
     void Start()
     {
         Init();
@@ -20,12 +24,12 @@ public class Managers : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        _input.OnUpdate();
     }
 
     static void Init()
     {
-        if (Instance == null)
+        if (s_instance == null)
         {
             GameObject go = GameObject.Find("@Managers");
             if (go == null)
@@ -35,7 +39,7 @@ public class Managers : MonoBehaviour
             }
             DontDestroyOnLoad(go);
             
-            Instance = go.GetComponent<Managers>();    
+            s_instance = go.GetComponent<Managers>();    
         }
         
     }
